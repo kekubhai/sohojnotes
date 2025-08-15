@@ -27,13 +27,15 @@ export default function Header() {
       <div className="container flex h-16 items-center justify-between px-4 lg:px-8">
         {/* Logo */}
         <Link href="/" className="flex items-center space-x-2">
-          <Image
-            src="https://d22po4pjz3o32e.cloudfront.net/logo-image.svg"
-            alt="SohojNotes Logo"
-            width={120}
-            height={32}
-            className="h-8 w-auto"
-          />
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-blue-600 to-purple-600 shadow-lg">
+            <span className="text-lg font-bold text-white">সহ</span>
+          </div>
+          <div className="flex flex-col">
+            <span className="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+              সহজPath
+            </span>
+            <span className="text-xs text-muted-foreground -mt-1">Smart Notes</span>
+          </div>
         </Link>
 
         {/* Desktop Navigation */}

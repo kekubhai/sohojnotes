@@ -89,10 +89,15 @@ export default function Footer() {
           <div className="lg:col-span-2">
             <div className="mb-4">
               <Link href="/" className="flex items-center space-x-2">
-                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
-                  <span className="text-sm font-bold text-primary-foreground">SN</span>
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-blue-600 to-purple-600 shadow-lg">
+                  <span className="text-lg font-bold text-white">সহ</span>
                 </div>
-                <span className="text-xl font-bold">SohojNotes</span>
+                <div className="flex flex-col">
+                  <span className="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                    সহজPath
+                  </span>
+                  <span className="text-xs text-muted-foreground -mt-1">Smart Notes</span>
+                </div>
               </Link>
             </div>
             <p className="mb-6 text-sm text-muted-foreground">
@@ -104,15 +109,15 @@ export default function Footer() {
             <div className="space-y-2 text-sm">
               <div className="flex items-center space-x-2 text-muted-foreground">
                 <Mail className="h-4 w-4" />
-                <span>support@sohojnotes.com</span>
+                <span>support@sahojpath.com</span>
               </div>
               <div className="flex items-center space-x-2 text-muted-foreground">
                 <Phone className="h-4 w-4" />
-                <span>+1 (555) 123-4567</span>
+                <span>+880 (123) 456-7890</span>
               </div>
               <div className="flex items-center space-x-2 text-muted-foreground">
                 <MapPin className="h-4 w-4" />
-                <span>San Francisco, CA</span>
+                <span>Dhaka, Bangladesh</span>
               </div>
             </div>
           </div>
@@ -192,7 +197,7 @@ export default function Footer() {
         {/* Bottom Section */}
         <div className="flex flex-col items-center justify-between space-y-4 sm:flex-row sm:space-y-0">
           <div className="flex items-center space-x-4 text-sm text-muted-foreground">
-            <span>© 2024 SohojNotes. All rights reserved.</span>
+            <span>© 2024 সহজPath. All rights reserved.</span>
             <Badge variant="outline" className="text-xs">
               Made with ❤️ for Students
             </Badge>

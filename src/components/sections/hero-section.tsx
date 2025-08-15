@@ -11,12 +11,12 @@ export default function HeroSection() {
           <div className="max-w-3xl space-y-6">
             <h1 className="text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl">
               Empower Your Learning Through{" "}
-              <span className="bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
                 Collaboration
               </span>
             </h1>
             <p className="text-lg text-muted-foreground sm:text-xl">
-              Join a vibrant community where students connect to share notes and
+              Join সহজPath - a vibrant community where students connect to share notes and
               insights. Collaborate effectively and enhance your academic journey
               today!
             </p>
