@@ -80,7 +80,7 @@ export default function Header() {
           <Button variant="outline" size="sm">
             Join
           </Button>
-          <Button size="sm">Login</Button>
+          <Button size="sm" className="bg-blue-600 text-white">Login</Button>
         </div>
 
         {/* Mobile menu button */}

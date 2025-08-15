@@ -36,7 +36,7 @@ export default function Home() {
               <Button variant="outline" className="w-full">
                 Join
               </Button>
-              <Button className="bg-neutral-darkest text-white w-full">
+              <Button className="bg-blue-600 text-white w-full">
                 Login
               </Button>
             </div>

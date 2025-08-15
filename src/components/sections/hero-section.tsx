@@ -21,7 +21,7 @@ export default function HeroSection() {
               today!
             </p>
             <div className="flex flex-col gap-4 sm:flex-row sm:justify-center">
-              <Button size="lg" className="text-base">
+              <Button size="lg" className="text-base bg-blue-600 text-white">
                 Get Started
               </Button>
               <Button variant="outline" size="lg" className="text-base">
