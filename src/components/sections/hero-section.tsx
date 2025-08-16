@@ -1,7 +1,8 @@
 'use client'
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import { User } from "lucide-react";
+import {  User } from "lucide-react";
+import Link from "next/link";
 
 export default function HeroSection() {
   return (
@@ -41,12 +42,14 @@ export default function HeroSection() {
                 explore topics, and collaborate
               </p>
               <div className="mt-10 flex flex-col sm:flex-row sm:justify-center lg:justify-start gap-4">
-                <Button
-                  size="lg"
-                  className="bg-[#003566] hover:bg-[#002a51] text-white font-semibold px-8 py-6 text-lg rounded-full"
-                >
-                  Get Started
-                </Button>
+                <Link href="/dashboard">
+                  <Button
+                    size="lg"
+                    className="bg-[#003566] hover:bg-[#002a51] text-white font-semibold px-8 py-6 text-lg rounded-full"
+                  >
+                    Get Started
+                  </Button>
+                </Link>
                 <Button
                   variant="outline"
                   size="lg"
