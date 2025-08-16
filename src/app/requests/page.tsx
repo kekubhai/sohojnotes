@@ -5,7 +5,23 @@ import { motion } from "framer-motion";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Plus, BookOpen, FileText, ThumbsUp } from "lucide-react";
+import { ChartRadarDots } from "@/components/skillcharts";
+import {
+  Sheet,
+  SheetTrigger,
+  SheetContent,
+  SheetHeader,
+  SheetFooter,
+  SheetTitle,
+  SheetDescription,
+} from "@/components/ui/sheet";
 
+type RequestForm = {
+  topic: string;
+  semester: string;
+  focusedOn: string;
+  type: "Tutorial" | "Notes";
+};
 export default function RequestsPage() {
   const [requests, setRequests] = useState(() => [
     { id: 1, title: "Java Programs", user: "Rohit Kumar", type: "Tutorial", votes: 2, upvoted: false },
@@ -56,6 +72,59 @@ export default function RequestsPage() {
     );
   };
 
+  function RequestFormComponent({ onSubmit }: { onSubmit: (d: RequestForm) => void }) {
+    const [topic, setTopic] = useState("");
+    const [semester, setSemester] = useState("");
+    const [focusedOn, setFocusedOn] = useState("");
+    const [type, setType] = useState<RequestForm["type"]>("Tutorial");
+
+    return (
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          if (!topic) return;
+          onSubmit({ topic, semester, focusedOn, type });
+          setTopic("");
+          setSemester("");
+          setFocusedOn("");
+        }}
+        className="flex flex-col gap-3"
+      >
+        <label className="text-sm">
+          Topic
+          <input value={topic} onChange={(e) => setTopic(e.target.value)} className="mt-1 block w-full rounded-md border px-3 py-2" />
+        </label>
+
+        <label className="text-sm">
+          Semester
+          <input value={semester} onChange={(e) => setSemester(e.target.value)} className="mt-1 block w-full rounded-md border px-3 py-2" />
+        </label>
+
+        <label className="text-sm">
+          Focused on
+          <input value={focusedOn} onChange={(e) => setFocusedOn(e.target.value)} className="mt-1 block w-full rounded-md border px-3 py-2" />
+        </label>
+
+        <div className="flex items-center gap-2">
+          <label className="inline-flex items-center gap-2">
+            <input type="radio" name="type" checked={type === "Tutorial"} onChange={() => setType("Tutorial")} />
+            <span className="text-sm">Tutorial</span>
+          </label>
+          <label className="inline-flex items-center gap-2">
+            <input type="radio" name="type" checked={type === "Notes"} onChange={() => setType("Notes")} />
+            <span className="text-sm">Notes</span>
+          </label>
+        </div>
+
+        <div className="flex justify-end gap-2">
+          <Button type="submit" className="bg-blue-600 text-white">
+            Submit Request
+          </Button>
+        </div>
+      </form>
+    );
+  }
+
   return (
     <div className="min-h-screen p-8">
       {/* Page Title */}
@@ -67,8 +136,42 @@ export default function RequestsPage() {
       >
         Skill Requests ✨
       </motion.h1>
+      <div className="flex items-center justify-between mb-6">
+        <ChartRadarDots />
 
-      {/* Requests List */}
+        <div className="flex items-center gap-3">
+          <Sheet>
+            <SheetTrigger>
+              <Button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-2xl flex items-center gap-2 shadow-lg">
+                <Plus className="w-4 h-4" /> Request a Tutorial / Notes
+              </Button>
+            </SheetTrigger>
+            <SheetContent side="right" className="max-w-md bg-white">
+              <SheetHeader>
+                <SheetTitle>Request a Topic</SheetTitle>
+                <SheetDescription>Fill the fields below to request tutorials or notes.</SheetDescription>
+              </SheetHeader>
+
+              <div className="px-4 py-2">
+                <RequestFormComponent
+                  onSubmit={(data) => {
+                    const id = Math.max(0, ...requests.map((r) => r.id)) + 1;
+                    setRequests((prev) => [
+                      { id, title: data.topic, user: "You", type: data.type, votes: 0, upvoted: false },
+                      ...prev,
+                    ]);
+                  }}
+                />
+              </div>
+
+              <SheetFooter>
+                <div className="text-xs text-gray-500">Your request will appear in the list for others to upvote.</div>
+              </SheetFooter>
+            </SheetContent>
+          </Sheet>
+        </div>
+      </div>
+  {/* Requests List */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
         {requests.map((req, index) => (
           <motion.div
