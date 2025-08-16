@@ -1,11 +1,5 @@
-import React from 'react'
+import ExploreClient from "@/components/explore/ExploreClient";
 
-const page = () => {
-  return (
-    <div>
-      
-    </div>
-  )
+export default function Page() {
+  return <ExploreClient />;
 }
-
-export default page
