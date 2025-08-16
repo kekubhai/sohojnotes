@@ -156,57 +156,62 @@ export default function Home() {
       </section>
 
       {/* Stats Section */}
-      <section className="px-[5%] py-16 md:py-24 lg:py-28">
-        <div className="container">
-          <div className="mb-12 grid grid-cols-1 items-start justify-between gap-x-12 gap-y-5 md:mb-18 md:grid-cols-2 md:gap-x-12 md:gap-y-8 lg:mb-20 lg:gap-x-20">
-            <div>
-              <p className="mb-3 font-semibold md:mb-4">Stats</p>
-              <h3 className="heading-h2 font-bold">
-                Discover Our Growing Community of Students
-              </h3>
+  <section className="px-[5%] py-16 md:py-24 lg:py-28 bg-scheme-background">
+      <div className="container mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+          {/* Left: Text Content */}
+          <div>
+            <p className="mb-3 font-semibold md:mb-4">Stats</p>
+            <h3 className="heading-h2 font-bold mb-6">
+              Discover Our Growing Community of Students
+            </h3>
+            <p className="text-medium mb-6">
+              Join thousands of students collaborating and sharing notes.
+              Our platform empowers you to connect, learn, and succeed together.
+            </p>
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 mb-6">
+              <div>
+                <h3 className="heading-h2 mb-2 font-bold">3000+</h3>
+                <p>of students report improved grades through our services.</p>
+              </div>
+              <div>
+                <h3 className="heading-h2 mb-2 font-bold">5000+</h3>
+                <p>Notes written by our talented community</p>
+              </div>
             </div>
-            <div>
-              <p className="text-medium mb-6 md:mb-8">
-                Join thousands of students collaborating and sharing notes. Our
-                platform empowers you to connect, learn, and succeed together.
-              </p>
-              <div className="grid grid-cols-1 gap-6 py-2 sm:grid-cols-2">
-                <div>
-                  <h3 className="heading-h2 mb-2 font-bold">3000+</h3>
-                  <p>of students report improved grades through our services.</p>
-                </div>
-                <div>
-                  <h3 className="heading-h2 mb-2 font-bold">5000+</h3>
-                  <p>Notes written by our talented community</p>
-                </div>
-              </div>
-              <div className="mt-6 flex flex-wrap items-center gap-4 md:mt-8">
-                <Button variant="outline" className="px-6 py-3">
-                  Learn More
-                </Button>
-                <Button variant="ghost" className="gap-2 p-0">
-                  Explore
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24px"
-                    height="24px"
-                    viewBox="0 -960 960 960"
-                    className="text-scheme-text"
-                    fill="currentColor"
-                  >
-                    <path d="M504-480 348-636q-11-11-11-28t11-28q11-11 28-11t28 11l184 184q6 6 8.5 13t2.5 15q0 8-2.5 15t-8.5 13L404-268q-11 11-28 11t-28-11q-11-11-11-28t11-28l156-156Z"></path>
-                  </svg>
-                </Button>
-              </div>
+            <div className="mt-6 flex flex-wrap items-center gap-4">
+              <Button variant="outline" className="px-6 py-3">
+                Learn More
+              </Button>
+              <Button variant="ghost" className="gap-2 p-0">
+                Explore
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24px"
+                  height="24px"
+                  viewBox="0 -960 960 960"
+                  className="text-scheme-text"
+                  fill="currentColor"
+                >
+                  <path d="M504-480 348-636q-11-11-11-28t11-28q11-11 28-11t28 11l184 184q6 6 8.5 13t2.5 15q0 8-2.5 15t-8.5 13L404-268q-11 11-28 11t-28-11q-11-11-11-28t11-28l156-156Z"></path>
+                </svg>
+              </Button>
             </div>
           </div>
-          <img
-            src="https://d22po4pjz3o32e.cloudfront.net/placeholder-image-landscape.svg"
-            className="w-full rounded-image object-cover"
-            alt="Relume placeholder image"
-          />
+
+          {/* Right: Image (only visible on md screens and up) */}
+          <div className="hidden md:block">
+            <Image
+              src="/teach.png"
+              alt="Teaching Illustration"
+              width={600}
+              height={400}
+              className="w-full rounded-image object-cover drop-shadow-lg"
+            />
+          </div>
         </div>
-      </section>
+      </div>
+    </section>
 
       {/* Services Section */}
       <section className="px-[5%] py-16 md:py-24 lg:py-28">

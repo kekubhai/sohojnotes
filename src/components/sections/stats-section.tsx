@@ -70,7 +70,7 @@ export default function StatsSection() {
           <div className="relative">
             <div className="overflow-hidden rounded-2xl bg-muted shadow-xl">
               <Image
-                src="https://d22po4pjz3o32e.cloudfront.net/placeholder-image-landscape.svg"
+                src="/teach.png"
                 alt="Community collaboration"
                 width={600}
                 height={400}
