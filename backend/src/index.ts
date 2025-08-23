@@ -3,12 +3,15 @@ import cors from 'cors';
 import helmet from 'helmet';
 import morgan from 'morgan';
 import dotenv from 'dotenv';
+import { PrismaClient } from '@prisma/client';
 
 // Load environment variables
 dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 5000; // Changed to 5000 to avoid conflicts with Next.js
+
+const prisma = new PrismaClient();
 
 // Middleware
 app.use(helmet()); // Security headers
@@ -41,40 +44,70 @@ app.get('/api/health', (req: Request, res: Response) => {
 });
 
 // Notes API placeholder routes
-app.get('/api/notes', (req: Request, res: Response) => {
-  res.json({
-    message: 'Get all notes',
-    notes: []
+// Notes CRUD using Prisma
+app.get('/api/notes', async (req: Request, res: Response) => {
+  const notes = await prisma.note.findMany({
+    include: { author: true, noteTags: { include: { tag: true } }, comments: true }
   });
+  res.json({ notes });
 });
 
-app.post('/api/notes', (req: Request, res: Response) => {
-  res.json({
-    message: 'Create new note',
-    note: req.body
-  });
+app.post('/api/notes', async (req: Request, res: Response) => {
+  const { title, content, authorId, tags = [], published = false, excerpt } = req.body;
+  try {
+    const note = await prisma.note.create({
+      data: {
+        title,
+        content,
+        excerpt,
+        published,
+        author: { connect: { id: authorId } },
+      }
+    });
+
+    // connect tags if provided (create missing tags)
+    for (const t of tags) {
+      let tag = await prisma.tag.findUnique({ where: { name: t } });
+      if (!tag) {
+        tag = await prisma.tag.create({ data: { name: t } });
+      }
+      await prisma.noteTag.create({ data: { noteId: note.id, tagId: tag.id } });
+    }
+
+    const created = await prisma.note.findUnique({ where: { id: note.id }, include: { noteTags: { include: { tag: true } } } });
+    res.status(201).json({ note: created });
+  } catch (err: any) {
+    console.error(err);
+    res.status(500).json({ error: err.message });
+  }
 });
 
-app.get('/api/notes/:id', (req: Request, res: Response) => {
-  res.json({
-    message: `Get note ${req.params.id}`,
-    noteId: req.params.id
-  });
+app.get('/api/notes/:id', async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const note = await prisma.note.findUnique({ where: { id }, include: { author: true, noteTags: { include: { tag: true } }, comments: true } });
+  if (!note) return res.status(404).json({ message: 'Note not found' });
+  res.json({ note });
 });
 
-app.put('/api/notes/:id', (req: Request, res: Response) => {
-  res.json({
-    message: `Update note ${req.params.id}`,
-    noteId: req.params.id,
-    updates: req.body
-  });
+app.put('/api/notes/:id', async (req: Request, res: Response) => {
+  const { id } = req.params;
+  try {
+    const updates = req.body;
+    const updated = await prisma.note.update({ where: { id }, data: updates });
+    res.json({ note: updated });
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
-app.delete('/api/notes/:id', (req: Request, res: Response) => {
-  res.json({
-    message: `Delete note ${req.params.id}`,
-    noteId: req.params.id
-  });
+app.delete('/api/notes/:id', async (req: Request, res: Response) => {
+  const { id } = req.params;
+  try {
+    await prisma.note.delete({ where: { id } });
+    res.json({ message: 'Deleted' });
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
 // Error handling middleware
