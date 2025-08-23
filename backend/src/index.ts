@@ -87,6 +87,7 @@ app.get('/api/notes/:id', async (req: Request, res: Response) => {
   const note = await prisma.note.findUnique({ where: { id }, include: { author: true, noteTags: { include: { tag: true } }, comments: true } });
   if (!note) return res.status(404).json({ message: 'Note not found' });
   res.json({ note });
+  return note ;
 });
 
 app.put('/api/notes/:id', async (req: Request, res: Response) => {

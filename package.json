@@ -1,0 +1,22 @@
+{
+  "name": "sohojnotes-monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "packageManager": "pnpm@8.10.0",
+  "workspaces": [
+    "frontend",
+    "backend"
+  ],
+  "scripts": {
+    "install:all": "pnpm install -w",
+    "dev": "pnpm -w -r --parallel run dev",
+    "dev:frontend": "pnpm --filter frontend dev",
+    "dev:backend": "pnpm --filter backend dev",
+    "build": "pnpm -w -r run build",
+    "start": "pnpm -w -r run start",
+    "lint": "pnpm -w -r run lint"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
