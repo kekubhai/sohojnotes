@@ -8,6 +8,8 @@ const cors_1 = __importDefault(require("cors"));
 const helmet_1 = __importDefault(require("helmet"));
 const morgan_1 = __importDefault(require("morgan"));
 const dotenv_1 = __importDefault(require("dotenv"));
+const client_1 = __importDefault(require("./prisma/client"));
+const notes_router_1 = __importDefault(require("./routes/notes.router"));
 dotenv_1.default.config();
 const app = (0, express_1.default)();
 const PORT = process.env.PORT || 5000;
@@ -27,44 +29,27 @@ app.get('/', (req, res) => {
         timestamp: new Date().toISOString()
     });
 });
-app.get('/api/health', (req, res) => {
-    res.json({
-        status: 'healthy',
-        uptime: process.uptime(),
-        memory: process.memoryUsage(),
-        timestamp: new Date().toISOString()
-    });
+app.use('/api/notes', notes_router_1.default);
+app.put('/api/notes/:id', async (req, res) => {
+    const { id } = req.params;
+    try {
+        const updates = req.body;
+        const updated = await client_1.default.note.update({ where: { id }, data: updates });
+        res.json({ note: updated });
+    }
+    catch (err) {
+        res.status(500).json({ error: err.message });
+    }
 });
-app.get('/api/notes', (req, res) => {
-    res.json({
-        message: 'Get all notes',
-        notes: []
-    });
-});
-app.post('/api/notes', (req, res) => {
-    res.json({
-        message: 'Create new note',
-        note: req.body
-    });
-});
-app.get('/api/notes/:id', (req, res) => {
-    res.json({
-        message: `Get note ${req.params.id}`,
-        noteId: req.params.id
-    });
-});
-app.put('/api/notes/:id', (req, res) => {
-    res.json({
-        message: `Update note ${req.params.id}`,
-        noteId: req.params.id,
-        updates: req.body
-    });
-});
-app.delete('/api/notes/:id', (req, res) => {
-    res.json({
-        message: `Delete note ${req.params.id}`,
-        noteId: req.params.id
-    });
+app.delete('/api/notes/:id', async (req, res) => {
+    const { id } = req.params;
+    try {
+        await client_1.default.note.delete({ where: { id } });
+        res.json({ message: 'Deleted' });
+    }
+    catch (err) {
+        res.status(500).json({ error: err.message });
+    }
 });
 app.use((err, req, res, next) => {
     console.error(err.stack);
