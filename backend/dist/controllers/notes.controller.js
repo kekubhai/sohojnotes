@@ -35,6 +35,7 @@ const getNote = async (req, res) => {
     if (!note)
         return res.status(404).json({ message: 'Note not found' });
     res.json({ note });
+    return;
 };
 exports.getNote = getNote;
 const updateNote = async (req, res) => {
