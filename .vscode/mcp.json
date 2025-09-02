@@ -1,0 +1,23 @@
+{
+  "servers": {
+    "time": {
+      "command": {
+        "executable": "powershell",
+        "script": "Get-Date -Format \"HH:mm:ss\""
+      },
+      "args": {
+        "runMode": "sync"
+      }
+    },
+    "figma": {
+      "command": {
+        "executable": "figma",
+        "script": ""
+      },
+      "args": {
+        "apiKey": "your-figma-api-key",
+        "projectId": "your-figma-project-id"
+      }
+    }
+  }
+}
