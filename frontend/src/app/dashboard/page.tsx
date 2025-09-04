@@ -1,35 +1,57 @@
 "use client";
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { TrendingUp, ArrowUpRight, ArrowDownRight } from "lucide-react";
+import { TrendingUp, ArrowUpRight, ArrowDownRight, NotebookPen, ShoppingBasket, Wallet, Bell } from "lucide-react";
+import {
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+  ChartLegend,
+  ChartLegendContent,
+} from "@/components/ui/chart";
+import { Line, LineChart, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from "recharts";
 
 const statsData = [
   {
     title: "Notes Purchased",
     value: "14",
     change: "+12%",
-    trend: "up"
+    trend: "up" as const,
+    icon: ShoppingBasket,
   },
   {
-    title: "Notes Written", 
+    title: "Notes Written",
     value: "32",
     change: "+8%",
-    trend: "up"
+    trend: "up" as const,
+    icon: NotebookPen,
   },
   {
     title: "Earnings",
     value: "$560",
     change: "+15%",
-    trend: "up"
+    trend: "up" as const,
+    icon: Wallet,
   },
   {
     title: "Active Requests",
     value: "4",
     change: "+25%",
-    trend: "up"
-  }
+    trend: "up" as const,
+    icon: Bell,
+  },
+];
+
+const chartData = [
+  { day: "Mon", requests: 12, delivered: 8 },
+  { day: "Tue", requests: 16, delivered: 12 },
+  { day: "Wed", requests: 10, delivered: 9 },
+  { day: "Thu", requests: 18, delivered: 14 },
+  { day: "Fri", requests: 22, delivered: 19 },
+  { day: "Sat", requests: 14, delivered: 12 },
+  { day: "Sun", requests: 9, delivered: 7 },
 ];
 
 const recentRequests = [
@@ -74,99 +96,73 @@ export default function DashboardPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Welcome back, Arun!</h1>
-          <p className="text-gray-600">Here's what's happening with your notes today.</p>
+          <h1 className="text-3xl font-bold">Welcome back, Arun!</h1>
+          <p className="text-muted-foreground">Here's what's happening with your notes today.</p>
         </div>
-        <div className="text-sm text-gray-500">
-          সহজ Path
-        </div>
+        <div className="text-sm text-muted-foreground">সহজ Path</div>
       </div>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {statsData.map((stat, index) => (
-          <Card key={index} className="relative overflow-hidden">
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-medium text-gray-600">{stat.title}</p>
-                  <p className="text-3xl font-bold text-gray-900">{stat.value}</p>
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
+        {statsData.map((stat, index) => {
+          const Icon = stat.icon || TrendingUp;
+          return (
+            <Card key={index} className="relative overflow-hidden">
+              <CardContent className="p-6">
+                <div className="flex items-start justify-between">
+                  <div className="space-y-1">
+                    <p className="text-xs font-medium text-muted-foreground">{stat.title}</p>
+                    <p className="text-3xl font-bold tracking-tight">{stat.value}</p>
+                  </div>
+                  <div className={`inline-flex items-center gap-1 rounded-md px-2 py-1 text-xs ${
+                    stat.trend === "up" ? "text-emerald-600 bg-emerald-500/10" : "text-red-600 bg-red-500/10"
+                  }`}>
+                    {stat.trend === "up" ? (
+                      <ArrowUpRight className="h-4 w-4" />
+                    ) : (
+                      <ArrowDownRight className="h-4 w-4" />
+                    )}
+                    {stat.change}
+                  </div>
                 </div>
-                <div className={`flex items-center gap-1 text-sm font-medium ${
-                  stat.trend === 'up' ? 'text-green-600' : 'text-red-600'
-                }`}>
-                  {stat.trend === 'up' ? (
-                    <ArrowUpRight className="w-4 h-4" />
-                  ) : (
-                    <ArrowDownRight className="w-4 h-4" />
-                  )}
-                  {stat.change}
+                <div className="mt-4 flex items-center gap-2 text-muted-foreground">
+                  <Icon className="h-4 w-4" />
+                  <span className="text-xs">Last 7 days</span>
                 </div>
-              </div>
-            </CardContent>
-          </Card>
-        ))}
+              </CardContent>
+            </Card>
+          );
+        })}
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
         {/* Chart Section */}
         <Card className="col-span-1">
-          <CardHeader>
+          <CardHeader className="flex flex-row items-center justify-between gap-4">
             <CardTitle>Requests vs Delivered Notes</CardTitle>
-            <div className="flex gap-4">
+            <div className="flex gap-2">
               <Button variant="ghost" size="sm">Daily</Button>
               <Button variant="default" size="sm">Weekly</Button>
             </div>
           </CardHeader>
           <CardContent>
-            <div className="relative h-64">
-              {/* Chart Placeholder */}
-              <svg className="w-full h-full" viewBox="0 0 400 200">
-                {/* Grid lines */}
-                <defs>
-                  <pattern id="grid" width="40" height="20" patternUnits="userSpaceOnUse">
-                    <path d="M 40 0 L 0 0 0 20" fill="none" stroke="#f0f0f0" strokeWidth="1"/>
-                  </pattern>
-                </defs>
-                <rect width="100%" height="100%" fill="url(#grid)" />
-                
-                {/* Chart lines */}
-                <path 
-                  d="M 20 160 Q 80 140 120 120 T 200 100 T 280 110 T 360 90" 
-                  fill="none" 
-                  stroke="#3b82f6" 
-                  strokeWidth="3"
-                />
-                <path 
-                  d="M 20 180 Q 80 170 120 150 T 200 140 T 280 145 T 360 130" 
-                  fill="none" 
-                  stroke="#93c5fd" 
-                  strokeWidth="3"
-                />
-                
-                {/* Area under curves */}
-                <path 
-                  d="M 20 160 Q 80 140 120 120 T 200 100 T 280 110 T 360 90 L 360 200 L 20 200 Z" 
-                  fill="rgba(59, 130, 246, 0.1)"
-                />
-                <path 
-                  d="M 20 180 Q 80 170 120 150 T 200 140 T 280 145 T 360 130 L 360 200 L 20 200 Z" 
-                  fill="rgba(147, 197, 253, 0.1)"
-                />
-              </svg>
-              
-              {/* Legend */}
-              <div className="flex gap-6 mt-4">
-                <div className="flex items-center gap-2">
-                  <div className="w-3 h-3 rounded-full bg-blue-500"></div>
-                  <span className="text-sm text-gray-600">Requests</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <div className="w-3 h-3 rounded-full bg-blue-300"></div>
-                  <span className="text-sm text-gray-600">Delivered Notes</span>
-                </div>
-              </div>
-            </div>
+            <ChartContainer
+              className="w-full"
+              config={{
+                requests: { label: "Requests", color: "hsl(var(--chart-1))" },
+                delivered: { label: "Delivered", color: "hsl(var(--chart-2))" },
+              }}
+            >
+              <LineChart data={chartData} margin={{ left: 8, right: 8, top: 8, bottom: 8 }}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="day" tickLine={false} axisLine={false} />
+                <YAxis tickLine={false} axisLine={false} />
+                <ChartTooltip content={<ChartTooltipContent />} />
+                <ChartLegend content={<ChartLegendContent />} />
+                <Line type="monotone" dataKey="requests" stroke="var(--color-requests)" strokeWidth={2} dot={false} />
+                <Line type="monotone" dataKey="delivered" stroke="var(--color-delivered)" strokeWidth={2} dot={false} />
+              </LineChart>
+            </ChartContainer>
           </CardContent>
         </Card>
 
@@ -183,7 +179,7 @@ export default function DashboardPage() {
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              <div className="grid grid-cols-3 gap-4 text-sm font-medium text-gray-500 border-b pb-2">
+              <div className="grid grid-cols-3 gap-4 border-b pb-2 text-sm font-medium text-muted-foreground">
                 <span>Request</span>
                 <span>Subject</span>
                 <span>Status</span>
@@ -191,10 +187,10 @@ export default function DashboardPage() {
               {recentRequests.map((request, index) => (
                 <div key={index} className="grid grid-cols-3 gap-4 items-center py-2">
                   <div>
-                    <p className="font-medium text-gray-900">{request.request}</p>
+                    <p className="font-medium">{request.request}</p>
                   </div>
                   <div>
-                    <span className="text-gray-600">{request.subject}</span>
+                    <span className="text-muted-foreground">{request.subject}</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <Badge 
@@ -204,14 +200,14 @@ export default function DashboardPage() {
                         'outline'
                       }
                       className={
-                        request.status === 'Completed' ? 'bg-green-100 text-green-800' :
-                        request.status === 'Pending' ? 'bg-yellow-100 text-yellow-800' :
-                        'bg-blue-100 text-blue-800'
+                        request.status === 'Completed' ? 'bg-emerald-500/10 text-emerald-700' :
+                        request.status === 'Pending' ? 'bg-yellow-500/10 text-yellow-700' :
+                        'bg-blue-500/10 text-blue-700'
                       }
                     >
                       {request.status}
                     </Badge>
-                    <span className="text-sm text-gray-500">{request.date}</span>
+                    <span className="text-sm text-muted-foreground">{request.date}</span>
                   </div>
                 </div>
               ))}
@@ -228,11 +224,11 @@ export default function DashboardPage() {
         <CardContent>
           <div className="space-y-4">
             {notifications.map((notification, index) => (
-              <div key={index} className="flex items-start gap-4 p-4 bg-gray-50 rounded-lg">
-                <div className="w-2 h-2 rounded-full bg-blue-500 mt-2 flex-shrink-0"></div>
+              <div key={index} className="flex items-start gap-4 rounded-lg bg-muted p-4">
+                <div className="mt-2 h-2 w-2 flex-shrink-0 rounded-full bg-blue-500"></div>
                 <div className="flex-1">
-                  <p className="text-gray-900">{notification.message}</p>
-                  <p className="text-sm text-gray-500 mt-1">{notification.time}</p>
+                  <p>{notification.message}</p>
+                  <p className="mt-1 text-sm text-muted-foreground">{notification.time}</p>
                 </div>
               </div>
             ))}
