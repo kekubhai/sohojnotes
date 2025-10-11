@@ -7,9 +7,9 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-scheme-background text-scheme-text">
       {/* Header */}
-      <header className="z-[999] flex w-full items-center border-b border-scheme-border bg-scheme-background lg:min-h-18 lg:px-[5%]">
+      <header className="z-[999] flex w-full items-center border-b border-scheme-border bg-scheme-background lg:min-h-18">
         <div className="size-full lg:flex lg:items-center lg:justify-between">
-          <div className="flex min-h-16 items-center justify-between px-[5%] md:min-h-18 lg:min-h-full lg:px-0">
+          <div className="flex min-h-16 items-center justify-between md:min-h-18 lg:min-h-full lg:px-0">
             <a href="#">
               <img
                 src="https://d22po4pjz3o32e.cloudfront.net/logo-image.svg"
@@ -22,7 +22,7 @@ export default function Home() {
               <span className="my-[3px] h-0.5 w-6 bg-neutral-darkest"></span>
             </button>
           </div>
-          <div className="overflow-hidden px-[5%] lg:flex lg:items-center lg:px-0">
+          <div className="overflow-hidden lg:flex lg:items-center lg:px-0">
             <a href="#" className="text-regular block py-3 first:pt-7 lg:px-4 lg:py-2 first:lg:pt-2">
               Dashboard
             </a>
@@ -45,7 +45,7 @@ export default function Home() {
       </header>
 
       {/* Hero Section */}
-      <section className="px-[5%] py-16 md:py-24 lg:py-28">
+      <section className="py-16 md:py-24 lg:py-28">
         <div className="container">
           <div className="flex flex-col items-center">
             <div className="mb-12 text-center md:mb-18 lg:mb-20">
@@ -96,7 +96,7 @@ export default function Home() {
       </section>
 
       {/* Features Section */}
-      <section className="px-[5%] py-16 md:py-24 lg:py-28">
+      <section className="py-16 md:py-24 lg:py-28">
         <div className="container">
           <div className="mx-auto mb-12 w-full max-w-lg text-center md:mb-18 lg:mb-20">
             <h2 className="heading-h3 font-bold">
@@ -156,7 +156,7 @@ export default function Home() {
       </section>
 
       {/* Stats Section */}
-  <section className="px-[5%] py-16 md:py-24 lg:py-28 bg-scheme-background">
+  <section className="py-16 md:py-24 lg:py-28 bg-scheme-background">
       <div className="container mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
           {/* Left: Text Content */}
@@ -214,7 +214,7 @@ export default function Home() {
     </section>
 
       {/* Services Section */}
-      <section className="px-[5%] py-16 md:py-24 lg:py-28">
+      <section className="py-16 md:py-24 lg:py-28">
         <div className="container">
           <div className="mb-12 grid grid-cols-1 items-start gap-5 md:mb-18 md:grid-cols-2 md:gap-x-12 lg:mb-20 lg:gap-x-20">
             <div>
@@ -284,7 +284,7 @@ export default function Home() {
       </section>
 
       {/* Blog Section */}
-      <section className="px-[5%] py-16 md:py-24 lg:py-28">
+      <section className="py-16 md:py-24 lg:py-28">
         <div className="container">
           <div className="mb-12 md:mb-18 lg:mb-20">
             <div className="w-full max-w-lg">
@@ -372,7 +372,7 @@ export default function Home() {
       </section>
 
       {/* Testimonials Section */}
-      <section className="overflow-hidden px-[5%] py-16 md:py-24 lg:py-28">
+      <section className="overflow-hidden py-16 md:py-24 lg:py-28">
         <div className="container">
           <div className="relative overflow-hidden">
             <div className="relative">
@@ -414,7 +414,7 @@ export default function Home() {
       </section>
 
       {/* Footer */}
-      <footer className="px-[5%] py-12 md:py-18 lg:py-20">
+      <footer className="py-12 md:py-18 lg:py-20">
         <div className="container">
           <Card className="overflow-hidden rounded-card border border-scheme-border bg-scheme-foreground text-scheme-text grid grid-cols-1 gap-x-[8vw] gap-y-12 p-8 md:gap-y-16 md:p-12 lg:grid-cols-[0.75fr_1fr] lg:gap-y-4">
             <div className="flex flex-col">
