@@ -59,11 +59,12 @@ export default function ServicesSection() {
                 {/* Service Image */}
                 <div className="overflow-hidden">
                   <Image
-                    src="https://d22po4pjz3o32e.cloudfront.net/placeholder-image-landscape.svg"
+                    src={`/images/${index === 0 ? 'hire-writer.jpg' : index === 1 ? 'explore-notes.jpg' : 'community.jpg'}`}
                     alt={service.title}
                     width={400}
                     height={240}
                     className="aspect-video w-full object-cover transition-transform group-hover:scale-105"
+                    priority={index === 0}
                   />
                 </div>
 

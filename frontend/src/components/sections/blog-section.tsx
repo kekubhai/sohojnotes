@@ -63,11 +63,12 @@ export default function BlogSection() {
                 {/* Post Image */}
                 <div className="overflow-hidden">
                   <Image
-                    src="https://d22po4pjz3o32e.cloudfront.net/placeholder-image-landscape.svg"
+                    src={`/images/${index === 0 ? 'note-writing.jpg' : index === 1 ? 'success-story.jpg' : 'collaboration.jpg'}`}                    
                     alt={post.title}
                     width={400}
                     height={240}
                     className="aspect-[3/2] w-full object-cover transition-transform group-hover:scale-105"
+                    priority={index === 0}
                   />
                 </div>
 
