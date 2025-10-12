@@ -38,6 +38,15 @@
   --sidebar-border: hsl(220 13% 91%);
   --sidebar-ring: hsl(217.2 91.2% 59.8%);
 }
+.container {
+  @apply mx-auto px-4;
+}
+html, body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
+
 
 .dark {
   --background: 0 0% 3.9%;
