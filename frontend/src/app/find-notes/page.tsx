@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Lock, X, QrCode } from "lucide-react";
 
@@ -21,13 +21,26 @@ export default function NotesBank() {
   const [activeNote, setActiveNote] = useState<any | null>(null);
   const [scannerOpen, setScannerOpen] = useState(false);
   const [paidUnlockedIds, setPaidUnlockedIds] = useState<number[]>([]);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filteredNotes, setFilteredNotes] = useState(notesData[selectedTab]);
+
+  // Update filtered notes whenever tab or search query changes
+  useEffect(() => {
+    const query = searchQuery.toLowerCase();
+    const filtered = notesData[selectedTab].filter(
+      (note) =>
+        note.title.toLowerCase().includes(query) ||
+        note.subject.toLowerCase().includes(query) ||
+        note.author.toLowerCase().includes(query)
+    );
+    setFilteredNotes(filtered);
+  }, [selectedTab, searchQuery]);
 
   function openNote(note: any) {
     if (selectedTab === "free" || paidUnlockedIds.includes(note.id)) {
       setActiveNote(note);
       setModalOpen(true);
     } else {
-      // open scanner for paid notes
       setActiveNote(note);
       setScannerOpen(true);
     }
@@ -35,7 +48,6 @@ export default function NotesBank() {
 
   function simulatePayment() {
     if (!activeNote) return;
-    // Hardcoded success flow: mark note as unlocked and open modal
     setPaidUnlockedIds((s) => [...s, activeNote.id]);
     setScannerOpen(false);
     setTimeout(() => {
@@ -56,7 +68,7 @@ export default function NotesBank() {
       </motion.h1>
 
       {/* Tabs */}
-      <div className="flex justify-center mb-6">
+      <div className="flex justify-center mb-4">
         <button
           onClick={() => setSelectedTab("free")}
           className={`px-6 py-2 rounded-full mx-2 font-semibold transition ${
@@ -79,7 +91,18 @@ export default function NotesBank() {
         </button>
       </div>
 
-      {/* Notes Grid - square tiles */}
+      {/* Search Bar */}
+      <div className="flex justify-center mb-6">
+        <input
+          type="text"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          placeholder="🔍 Search notes by title, subject, or author..."
+          className="w-full md:w-1/2 p-2 border rounded-md shadow-sm focus:ring-2 focus:ring-blue-400 focus:outline-none"
+        />
+      </div>
+
+      {/* Notes Grid */}
       <motion.div
         key={selectedTab}
         initial={{ opacity: 0 }}
@@ -87,7 +110,7 @@ export default function NotesBank() {
         transition={{ duration: 0.4 }}
         className="grid md:grid-cols-2 lg:grid-cols-3 gap-6"
       >
-        {notesData[selectedTab].map((note) => (
+        {filteredNotes.map((note) => (
           <motion.div
             key={note.id}
             whileHover={{ scale: 1.03 }}
@@ -96,7 +119,6 @@ export default function NotesBank() {
             onClick={() => openNote(note)}
             className={`bg-white rounded-md shadow-md p-4 relative cursor-pointer aspect-square flex flex-col justify-between border border-transparent hover:border-gray-200`}
           >
-            {/* Lock for paid */}
             {selectedTab === "paid" && !paidUnlockedIds.includes(note.id) && (
               <div className="absolute top-3 right-3 bg-yellow-100 p-2 rounded-full">
                 <Lock className="w-5 h-5 text-yellow-700" />
@@ -122,16 +144,18 @@ export default function NotesBank() {
             </div>
           </motion.div>
         ))}
+
+        {filteredNotes.length === 0 && (
+          <p className="text-center text-gray-500 col-span-full">
+            No notes found for your search.
+          </p>
+        )}
       </motion.div>
 
-      {/* Modal for viewing note content (free or unlocked paid) */}
+      {/* Modal for viewing note content */}
       {modalOpen && activeNote && (
         <div className="fixed inset-0 z-50 flex items-center justify-center">
-          <div
-            className="absolute inset-0 bg-black/40 backdrop-blur-sm"
-            onClick={() => setModalOpen(false)}
-          />
-
+          <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={() => setModalOpen(false)} />
           <motion.div
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
@@ -143,19 +167,12 @@ export default function NotesBank() {
                 <h3 className="text-lg font-bold">{activeNote.title}</h3>
                 <p className="text-sm text-gray-500">{activeNote.subject} • By {activeNote.author}</p>
               </div>
-              <button
-                onClick={() => setModalOpen(false)}
-                className="p-2 rounded-md hover:bg-gray-100"
-                aria-label="Close"
-              >
+              <button onClick={() => setModalOpen(false)} className="p-2 rounded-md hover:bg-gray-100" aria-label="Close">
                 <X className="w-5 h-5 text-gray-600" />
               </button>
             </div>
-
             <div className="p-4 h-[calc(100%-72px)] overflow-auto text-sm text-gray-700">
-              {/* Note content - placeholder text */}
               <p className="whitespace-pre-line">{activeNote.content}</p>
-
               <div className="mt-6">
                 <h4 className="text-sm font-semibold mb-2">Download</h4>
                 <div className="flex gap-3">
@@ -171,11 +188,7 @@ export default function NotesBank() {
       {/* Scanner overlay for paid notes */}
       {scannerOpen && activeNote && (
         <div className="fixed inset-0 z-50 flex items-center justify-center">
-          <div
-            className="absolute inset-0 bg-black/40"
-            onClick={() => setScannerOpen(false)}
-          />
-
+          <div className="absolute inset-0 bg-black/40" onClick={() => setScannerOpen(false)} />
           <motion.div
             initial={{ y: 40, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
@@ -191,15 +204,11 @@ export default function NotesBank() {
                 <X className="w-5 h-5 text-gray-600" />
               </button>
             </div>
-
             <div className="flex flex-col items-center gap-4">
               <div className="w-48 h-48 bg-gray-50 rounded-md flex items-center justify-center border-2 border-dashed border-gray-200">
-                {/* QR / Scanner placeholder */}
                 <QrCode className="w-24 h-24 text-gray-400" />
               </div>
-
               <p className="text-sm text-gray-600 text-center">Scan to pay using your preferred UPI / Wallet app.</p>
-
               <div className="flex gap-3">
                 <button onClick={simulatePayment} className="px-4 py-2 rounded-md bg-green-600 text-white">Simulate Pay</button>
                 <button onClick={() => setScannerOpen(false)} className="px-4 py-2 rounded-md bg-gray-100">Cancel</button>
