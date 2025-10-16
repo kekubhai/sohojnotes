@@ -33,26 +33,10 @@ const navigation = {
 };
 
 const socialLinks = [
-  {
-    name: "Facebook",
-    href: "#",
-    icon: Facebook,
-  },
-  {
-    name: "Twitter", 
-    href: "#",
-    icon: Twitter,
-  },
-  {
-    name: "Instagram",
-    href: "#", 
-    icon: Instagram,
-  },
-  {
-    name: "LinkedIn",
-    href: "#",
-    icon: Linkedin,
-  },
+  { name: "Facebook", href: "#", icon: Facebook },
+  { name: "Twitter", href: "#", icon: Twitter },
+  { name: "Instagram", href: "#", icon: Instagram },
+  { name: "LinkedIn", href: "#", icon: Linkedin },
 ];
 
 export default function Footer() {
@@ -69,11 +53,7 @@ export default function Footer() {
               </p>
             </div>
             <div className="flex w-full max-w-md flex-col space-y-3 sm:flex-row sm:space-x-3 sm:space-y-0">
-              <Input
-                type="email"
-                placeholder="Enter your email"
-                className="flex-1"
-              />
+              <Input type="email" placeholder="Enter your email" className="flex-1" />
               <Button type="submit" className="px-8">
                 Subscribe
               </Button>
@@ -101,10 +81,10 @@ export default function Footer() {
               </Link>
             </div>
             <p className="mb-6 text-sm text-muted-foreground">
-              Empowering students through collaborative note-taking and seamless academic collaboration. 
+              Empowering students through collaborative note-taking and seamless academic collaboration.
               Transform your study experience today.
             </p>
-            
+
             {/* Contact Info */}
             <div className="space-y-2 text-sm">
               <div className="flex items-center space-x-2 text-muted-foreground">
@@ -117,7 +97,7 @@ export default function Footer() {
               </div>
               <div className="flex items-center space-x-2 text-muted-foreground">
                 <MapPin className="h-4 w-4" />
-                <span>kolkata, India</span>
+                <span>Kolkata, India</span>
               </div>
             </div>
           </div>
@@ -125,69 +105,23 @@ export default function Footer() {
           {/* Navigation Links */}
           <div className="lg:col-span-4">
             <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
-              <div>
-                <h4 className="mb-4 text-sm font-semibold">Product</h4>
-                <ul className="space-y-3 text-sm">
-                  {navigation.product.map((item) => (
-                    <li key={item.name}>
-                      <Link
-                        href={item.href}
-                        className="text-muted-foreground transition-colors hover:text-foreground"
-                      >
-                        {item.name}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              <div>
-                <h4 className="mb-4 text-sm font-semibold">Company</h4>
-                <ul className="space-y-3 text-sm">
-                  {navigation.company.map((item) => (
-                    <li key={item.name}>
-                      <Link
-                        href={item.href}
-                        className="text-muted-foreground transition-colors hover:text-foreground"
-                      >
-                        {item.name}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              <div>
-                <h4 className="mb-4 text-sm font-semibold">Resources</h4>
-                <ul className="space-y-3 text-sm">
-                  {navigation.resources.map((item) => (
-                    <li key={item.name}>
-                      <Link
-                        href={item.href}
-                        className="text-muted-foreground transition-colors hover:text-foreground"
-                      >
-                        {item.name}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              <div>
-                <h4 className="mb-4 text-sm font-semibold">Legal</h4>
-                <ul className="space-y-3 text-sm">
-                  {navigation.legal.map((item) => (
-                    <li key={item.name}>
-                      <Link
-                        href={item.href}
-                        className="text-muted-foreground transition-colors hover:text-foreground"
-                      >
-                        {item.name}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
+              {Object.entries(navigation).map(([section, links]) => (
+                <div key={section}>
+                  <h4 className="mb-4 text-sm font-semibold capitalize">{section}</h4>
+                  <ul className="space-y-3 text-sm">
+                    {links.map((item) => (
+                      <li key={item.name}>
+                        <Link
+                          href={item.href}
+                          className="relative text-muted-foreground transition-all duration-200 hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r hover:from-blue-600 hover:to-purple-600 after:absolute after:left-0 after:-bottom-0.5 after:h-[1.5px] after:w-0 hover:after:w-full after:bg-gradient-to-r after:from-blue-600 after:to-purple-600 after:transition-all after:duration-300"
+                        >
+                          {item.name}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
             </div>
           </div>
         </div>
@@ -202,14 +136,14 @@ export default function Footer() {
               Made with ❤️ for Students
             </Badge>
           </div>
-          
+
           {/* Social Links */}
           <div className="flex items-center space-x-4">
             {socialLinks.map((social) => (
               <Link
                 key={social.name}
                 href={social.href}
-                className="text-muted-foreground transition-colors hover:text-foreground"
+                className="transition-transform text-muted-foreground hover:text-foreground hover:scale-110"
                 aria-label={social.name}
               >
                 <social.icon className="h-5 w-5" />
