@@ -212,6 +212,19 @@ The backend can be deployed on:
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
+
+## ✨ Contributors
+
+#### Thanks to all the wonderful contributors 💖
+
+<a href="https://github.com/kekubhai/sohojnotes/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=kekubhai/sohojnotes" />
+</a>
+
+#### See full list of contributor contribution [Contribution Graph](https://github.com/kekubhai/sohojnotes/graphs/contributors) 
+
+
+
 ## 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
