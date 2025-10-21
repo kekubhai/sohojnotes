@@ -83,9 +83,13 @@ export default function Sidebar() {
               <div key={item.label} className={`px-1 py-1 ${collapsed ? "flex justify-center" : ""}`}>
                 <ProfileSheet
                   trigger={
-                    <button className={`flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors hover:bg-gray-50 ${
-                      item.active ? "bg-blue-50 text-blue-600" : "text-gray-700"
-                    }`} title={item.label}>
+                    <button 
+                      type="button"
+                      className={`flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors hover:bg-gray-50 w-full text-left ${
+                        item.active ? "bg-blue-50 text-blue-600" : "text-gray-700"
+                      }`} 
+                      title={item.label}
+                    >
                       <item.icon className="w-5 h-5" />
                       {!collapsed && <span className="truncate">{item.label}</span>}
                     </button>

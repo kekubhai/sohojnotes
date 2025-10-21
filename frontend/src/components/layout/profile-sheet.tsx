@@ -60,7 +60,7 @@ export default function ProfileSheet({ user = sampleProfile, trigger, }: { user?
 
   return (
     <Sheet>
-      <SheetTrigger>{trigger ?? defaultTrigger}</SheetTrigger>
+      <SheetTrigger asChild>{trigger ?? defaultTrigger}</SheetTrigger>
 
       <SheetContent side="right" className="max-w-md bg-white">
         <SheetHeader>
