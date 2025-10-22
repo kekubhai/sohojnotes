@@ -141,7 +141,7 @@ export default function RequestsPage() {
 
         <div className="flex items-center gap-3">
           <Sheet>
-            <SheetTrigger>
+            <SheetTrigger asChild>
               <Button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-2xl flex items-center gap-2 shadow-lg">
                 <Plus className="w-4 h-4" /> Request a Tutorial / Notes
               </Button>

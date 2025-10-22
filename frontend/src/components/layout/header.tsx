@@ -4,23 +4,38 @@ import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import { Menu, X, ChevronDown } from "lucide-react";
+import { Menu, X, ChevronDown, User } from "lucide-react";
+import { useAuth } from "@/context/AuthContext";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const navigation = [
-  { name: "Dashboard", href: "#" },
-  { name: "My Notes", href: "#" },
-  { name: "Explore Deals", href: "#" },
+  { name: "Dashboard", href: "/dashboard" },
+  { name: "Explore", href: "/explore" },
+  { name: "Deals", href: "/deals" },
+  { name: "Find Notes", href: "/find-notes" },
+  { name: "Requests", href: "/requests" },
 ];
 
 const moreOptions = [
   { name: "Settings", href: "#" },
   { name: "Help Center", href: "#" },
-  { name: "Profile", href: "#" },
 ];
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [moreMenuOpen, setMoreMenuOpen] = useState(false);
+  const { user, logout } = useAuth();
+
+  const handleLogout = () => {
+    logout();
+  };
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -75,12 +90,63 @@ export default function Header() {
           </div>
         </nav>
 
-        {/* Desktop Auth Buttons */}
+        {/* Desktop Auth Buttons or User Profile */}
         <div className="hidden lg:flex lg:items-center lg:space-x-2">
-          <Button variant="outline" size="sm">
-            Join
-          </Button>
-          <Button size="sm" className="bg-blue-600 text-white">Login</Button>
+          {user ? (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" className="relative h-8 w-8 rounded-full">
+                  {user.avatarUrl ? (
+                    <Image
+                      src={user.avatarUrl}
+                      alt={user.name}
+                      width={32}
+                      height={32}
+                      className="rounded-full"
+                    />
+                  ) : (
+                    <div className="bg-blue-100 text-blue-800 rounded-full w-8 h-8 flex items-center justify-center">
+                      <User className="h-4 w-4" />
+                    </div>
+                  )}
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="w-56" align="end" forceMount>
+                <DropdownMenuLabel className="font-normal">
+                  <div className="flex flex-col space-y-1">
+                    <p className="text-sm font-medium leading-none">{user.name}</p>
+                    <p className="text-xs leading-none text-muted-foreground">
+                      {user.email}
+                    </p>
+                  </div>
+                </DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem asChild>
+                  <Link href="/dashboard" className="cursor-pointer">
+                    Dashboard
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link href="/profile" className="cursor-pointer">
+                    Profile
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={handleLogout} className="cursor-pointer">
+                  Log out
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          ) : (
+            <>
+              <Button variant="outline" size="sm" asChild>
+                <Link href="/signup">Join</Link>
+              </Button>
+              <Button size="sm" className="bg-blue-600 text-white" asChild>
+                <Link href="/login">Login</Link>
+              </Button>
+            </>
+          )}
         </div>
 
         {/* Mobile menu button */}
@@ -121,10 +187,20 @@ export default function Header() {
               </Link>
             ))}
             <div className="mt-4 space-y-2">
-              <Button variant="outline" className="w-full">
-                Join
-              </Button>
-              <Button className="w-full">Login</Button>
+              {user ? (
+                <Button onClick={handleLogout} className="w-full">
+                  Logout
+                </Button>
+              ) : (
+                <>
+                  <Button variant="outline" className="w-full" asChild>
+                    <Link href="/signup">Join</Link>
+                  </Button>
+                  <Button className="w-full" asChild>
+                    <Link href="/login">Login</Link>
+                  </Button>
+                </>
+              )}
             </div>
           </div>
         </div>

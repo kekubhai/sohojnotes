@@ -5,19 +5,35 @@ import morgan from 'morgan';
 import dotenv from 'dotenv';
 import prisma from './prisma/client';
 import notesRouter from './routes/notes.router';
+import authRouter from './routes/auth/auth';
 
 // Load environment variables
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 5000; // Changed to 5000 to avoid conflicts with Next.js
+const PORT = process.env.PORT || 5002; // Changed to 5002 to avoid conflicts with other services
 
 
 // Middleware
 app.use(helmet()); // Security headers
 app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:3000',
-  credentials: true
+  origin: ['http://localhost:3000', 'http://127.0.0.1:3000', 'localhost:3000'],
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
+  allowedHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept', 'Authorization', 'X-API-Key'],
+  exposedHeaders: ['Authorization', 'X-Total-Count'],
+  optionsSuccessStatus: 200,
+  preflightContinue: true
+}));
+
+// Handle preflight requests for all routes
+app.options('*', cors({
+  origin: ['http://localhost:3000', 'http://127.0.0.1:3000', 'localhost:3000'],
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
+  allowedHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept', 'Authorization', 'X-API-Key'],
+  exposedHeaders: ['Authorization', 'X-Total-Count'],
+  optionsSuccessStatus: 200
 }));
 app.use(morgan('combined')); // Logging
 app.use(express.json({ limit: '10mb' })); // Parse JSON bodies
@@ -33,7 +49,17 @@ app.get('/', (req: Request, res: Response) => {
   });
 });
 
+// Add a test endpoint for connectivity testing
+app.get('/api/test', (req: Request, res: Response) => {
+  res.json({
+    message: 'API connectivity test successful',
+    timestamp: new Date().toISOString(),
+    server: 'sohojnotes-backend'
+  });
+});
+
 // Mount routers
+app.use('/api/auth', authRouter);
 app.use('/api/notes', notesRouter);
 app.put('/api/notes/:id', async (req: Request, res: Response) => {
   const { id } = req.params;

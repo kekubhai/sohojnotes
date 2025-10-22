@@ -4,7 +4,13 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   return (
     <div className="min-h-screen">
       <Sidebar />
-      <main style={{ marginLeft: 'var(--sohoj-sidebar-width)' }} className="p-8 bg-white min-h-screen">
+      <main 
+        style={{ 
+          marginLeft: 'var(--sohoj-sidebar-width)',
+          paddingTop: '4rem' // h-16 = 4rem
+        }} 
+        className="p-8 bg-white min-h-screen"
+      >
         {children}
       </main>
     </div>
