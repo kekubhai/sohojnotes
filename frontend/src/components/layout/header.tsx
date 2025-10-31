@@ -4,7 +4,8 @@ import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import { Menu, X, ChevronDown } from "lucide-react";
+import { Menu, X, ChevronDown, Settings, HelpCircle, User } from "lucide-react";
+import ProfileSheet from "./profile-sheet";
 
 const navigation = [
   { name: "Dashboard", href: "#" },
@@ -13,9 +14,8 @@ const navigation = [
 ];
 
 const moreOptions = [
-  { name: "Settings", href: "#" },
-  { name: "Help Center", href: "#" },
-  { name: "Profile", href: "#" },
+  { name: "Settings", href: "#", icon: Settings },
+  { name: "Help Center", href: "#", icon: HelpCircle },
 ];
 
 export default function Header() {
@@ -65,11 +65,19 @@ export default function Header() {
                   <Link
                     key={item.name}
                     href={item.href}
-                    className="block rounded-sm px-3 py-2 text-sm transition-colors hover:bg-accent"
+                    className="flex items-center gap-2 rounded-sm px-3 py-2 text-sm transition-colors hover:bg-accent"
                   >
+                    {item.icon && <item.icon className="h-4 w-4" />}
                     {item.name}
                   </Link>
                 ))}
+                <div className="border-t my-1" />
+                <ProfileSheet trigger={
+                  <button className="flex w-full items-center gap-2 rounded-sm px-3 py-2 text-sm transition-colors hover:bg-accent">
+                    <User className="h-4 w-4" />
+                    Profile
+                  </button>
+                } />
               </div>
             )}
           </div>
@@ -115,11 +123,18 @@ export default function Header() {
               <Link
                 key={item.name}
                 href={item.href}
-                className="block rounded-md px-3 py-2 text-base font-medium transition-colors hover:bg-accent"
+                className="flex items-center gap-2 rounded-md px-3 py-2 text-base font-medium transition-colors hover:bg-accent"
               >
+                {item.icon && <item.icon className="h-5 w-5" />}
                 {item.name}
               </Link>
             ))}
+            <ProfileSheet trigger={
+              <button className="flex w-full items-center gap-2 rounded-md px-3 py-2 text-base font-medium transition-colors hover:bg-accent">
+                <User className="h-5 w-5" />
+                Profile
+              </button>
+            } />
             <div className="mt-4 space-y-2">
               <Button variant="outline" className="w-full">
                 Join
