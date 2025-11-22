@@ -1,0 +1,96 @@
+name: Production Build & Deploy
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+env:
+  # Common environment variables
+  NODE_VERSION: '20'
+
+jobs:
+  build-and-test:
+    name: Build and Test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Generate Prisma Client
+        run: |
+          cd backend
+          npx prisma generate
+        env:
+          # Prisma generate needs a DATABASE_URL even if it's just for generation
+          # We can use a dummy one for the build step if not connecting to a real DB
+          DATABASE_URL: "file:./dev.db" 
+
+      - name: Lint Code
+        run: npm run lint --if-present
+
+      - name: Build Backend
+        run: |
+          cd backend
+          npm run build
+
+      - name: Build Frontend
+        run: |
+          cd frontend
+          npm run build
+        env:
+          # Add any build-time env vars for frontend here
+          NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL || 'http://localhost:5002' }}
+
+      # - name: Run Backend Tests
+      #   run: |
+      #     cd backend
+      #     pnpm test
+
+  # Example Deployment Job - Uncomment and configure based on your hosting provider
+  # deploy:
+  #   name: Deploy
+  #   needs: build-and-test
+  #   runs-on: ubuntu-latest
+  #   if: github.ref == 'refs/heads/main'
+  #   
+  #   steps:
+  #     - name: Checkout source code
+  #       uses: actions/checkout@v4
+  #
+  #     # --- Frontend Deployment (Example: Vercel) ---
+  #     # - name: Deploy Frontend to Vercel
+  #     #   uses: amondnet/vercel-action@v20
+  #     #   with:
+  #     #     vercel-token: ${{ secrets.VERCEL_TOKEN }}
+  #     #     vercel-org-id: ${{ secrets.ORG_ID}}
+  #     #     vercel-project-id: ${{ secrets.PROJECT_ID}}
+  #     #     working-directory: ./frontend
+  #     #     vercel-args: '--prod'
+  #
+  #     # --- Backend Deployment (Example: SSH to VPS) ---
+  #     # - name: Deploy Backend via SSH
+  #     #   uses: appleboy/ssh-action@master
+  #     #   with:
+  #     #     host: ${{ secrets.HOST }}
+  #     #     username: ${{ secrets.USERNAME }}
+  #     #     key: ${{ secrets.SSH_KEY }}
+  #     #     script: |
+  #     #       cd /path/to/app
+  #     #       git pull
+  #     #       pnpm install
+  #     #       cd backend
+  #     #       npx prisma migrate deploy
+  #     #       pnpm build
+  #     #       pm2 restart api-server
