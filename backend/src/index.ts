@@ -17,7 +17,7 @@ const PORT = process.env.PORT || 5002; // Changed to 5002 to avoid conflicts wit
 // Middleware
 app.use(helmet()); // Security headers
 app.use(cors({
-  origin: ['http://localhost:3000', 'http://127.0.0.1:3000', 'localhost:3000'],
+  origin: ['http://localhost:3000', 'http://127.0.0.1:3000', 'http://localhost:3000'],
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
   allowedHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept', 'Authorization', 'X-API-Key'],
@@ -28,7 +28,7 @@ app.use(cors({
 
 // Handle preflight requests for all routes
 app.options('*', cors({
-  origin: ['http://localhost:3000', 'http://127.0.0.1:3000', 'localhost:3000'],
+  origin: ['http://localhost:3000', 'http://127.0.0.1:3000', 'http://localhost:3000'],
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
   allowedHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept', 'Authorization', 'X-API-Key'],
@@ -61,26 +61,6 @@ app.get('/api/test', (req: Request, res: Response) => {
 // Mount routers
 app.use('/api/auth', authRouter);
 app.use('/api/notes', notesRouter);
-app.put('/api/notes/:id', async (req: Request, res: Response) => {
-  const { id } = req.params;
-  try {
-    const updates = req.body;
-    const updated = await prisma.note.update({ where: { id }, data: updates });
-    res.json({ note: updated });
-  } catch (err: any) {
-    res.status(500).json({ error: err.message });
-  }
-});
-
-app.delete('/api/notes/:id', async (req: Request, res: Response) => {
-  const { id } = req.params;
-  try {
-    await prisma.note.delete({ where: { id } });
-    res.json({ message: 'Deleted' });
-  } catch (err: any) {
-    res.status(500).json({ error: err.message });
-  }
-});
 
 // Error handling middleware
 app.use((err: Error, req: Request, res: Response, next: any) => {
