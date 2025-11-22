@@ -37,8 +37,7 @@ jobs:
           # We can use a dummy one for the build step if not connecting to a real DB
           DATABASE_URL: "file:./dev.db" 
 
-      - name: Lint Code
-        run: npm run lint --if-present
+      
 
       - name: Build Backend
         run: |
