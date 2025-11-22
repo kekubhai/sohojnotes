@@ -2,6 +2,7 @@
 
 generator client {
   provider = "prisma-client-js"
+  output   = "../generated/prisma"
 }
 
 datasource db {
@@ -11,38 +12,38 @@ datasource db {
 // Models
 
 model User {
-  id          String    @id @default(cuid())
-  name        String
-  email       String    @unique
-  password    String
-  avatarUrl   String?   
-  bio         String?   
-  role        String    @default("USER")
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  id        String   @id @default(cuid())
+  name      String
+  email     String   @unique
+  password  String
+  avatarUrl String?
+  bio       String?
+  role      String   @default("USER")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  notes       Note[]    @relation("authorNotes")
-  comments    Comment[]
-  requests    Request[]
+  notes    Note[]    @relation("authorNotes")
+  comments Comment[]
+  requests Request[]
 }
 
 model Note {
-  id          String     @id @default(cuid())
-  title       String
-  content     String
-  excerpt     String?
-  published   Boolean    @default(false)
-  authorId    String
-  author      User       @relation(fields: [authorId], references: [id], name: "authorNotes")
-  noteTags    NoteTag[]
-  comments    Comment[]
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
+  id        String    @id @default(cuid())
+  title     String
+  content   String
+  excerpt   String?
+  published Boolean   @default(false)
+  authorId  String
+  author    User      @relation(fields: [authorId], references: [id], name: "authorNotes")
+  noteTags  NoteTag[]
+  comments  Comment[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
 }
 
 model Tag {
-  id    String   @id @default(cuid())
-  name  String   @unique
+  id       String    @id @default(cuid())
+  name     String    @unique
   noteTags NoteTag[]
 }
 

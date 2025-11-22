@@ -8,15 +8,28 @@ const cors_1 = __importDefault(require("cors"));
 const helmet_1 = __importDefault(require("helmet"));
 const morgan_1 = __importDefault(require("morgan"));
 const dotenv_1 = __importDefault(require("dotenv"));
-const client_1 = __importDefault(require("./prisma/client"));
 const notes_router_1 = __importDefault(require("./routes/notes.router"));
+const auth_1 = __importDefault(require("./routes/auth/auth"));
 dotenv_1.default.config();
 const app = (0, express_1.default)();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5002;
 app.use((0, helmet_1.default)());
 app.use((0, cors_1.default)({
-    origin: process.env.FRONTEND_URL || 'http://localhost:3000',
-    credentials: true
+    origin: ['http://localhost:3000', 'http://127.0.0.1:3000', 'http://localhost:3000'],
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
+    allowedHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept', 'Authorization', 'X-API-Key'],
+    exposedHeaders: ['Authorization', 'X-Total-Count'],
+    optionsSuccessStatus: 200,
+    preflightContinue: true
+}));
+app.options('*', (0, cors_1.default)({
+    origin: ['http://localhost:3000', 'http://127.0.0.1:3000', 'http://localhost:3000'],
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
+    allowedHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept', 'Authorization', 'X-API-Key'],
+    exposedHeaders: ['Authorization', 'X-Total-Count'],
+    optionsSuccessStatus: 200
 }));
 app.use((0, morgan_1.default)('combined'));
 app.use(express_1.default.json({ limit: '10mb' }));
@@ -29,28 +42,15 @@ app.get('/', (req, res) => {
         timestamp: new Date().toISOString()
     });
 });
+app.get('/api/test', (req, res) => {
+    res.json({
+        message: 'API connectivity test successful',
+        timestamp: new Date().toISOString(),
+        server: 'sohojnotes-backend'
+    });
+});
+app.use('/api/auth', auth_1.default);
 app.use('/api/notes', notes_router_1.default);
-app.put('/api/notes/:id', async (req, res) => {
-    const { id } = req.params;
-    try {
-        const updates = req.body;
-        const updated = await client_1.default.note.update({ where: { id }, data: updates });
-        res.json({ note: updated });
-    }
-    catch (err) {
-        res.status(500).json({ error: err.message });
-    }
-});
-app.delete('/api/notes/:id', async (req, res) => {
-    const { id } = req.params;
-    try {
-        await client_1.default.note.delete({ where: { id } });
-        res.json({ message: 'Deleted' });
-    }
-    catch (err) {
-        res.status(500).json({ error: err.message });
-    }
-});
 app.use((err, req, res, next) => {
     console.error(err.stack);
     res.status(500).json({
